@@ -29,7 +29,12 @@ def createTag():
             db.session.add(new_tag)
             db.session.commit()
             res = {
-                "tag_id": new_tag.id,
+                "data": {
+                    "id": new_tag.id,
+                    "name": new_tag.name,
+                    "color": new_tag.color,
+                    "userId": new_tag.user_id
+                },
                 "success": True,
                 "message": "Tag Created"
             }
