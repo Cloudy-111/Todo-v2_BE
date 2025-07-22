@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from views import apiUser, apiTag, apiPriority, apiTask
+from views import apiUser, apiTag, apiPriority, apiTask, apiChecklist
 from models import db
 from flask_cors import CORS
 
@@ -16,6 +16,8 @@ app.register_blueprint(apiUser.userApi)
 
 db.init_app(app)
 app.register_blueprint(apiTag.tagApi)
+
+app.register_blueprint(apiChecklist.checklistApi)
 
 app.register_blueprint(apiTask.taskApi)
 
