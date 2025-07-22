@@ -50,3 +50,8 @@ def createTag():
 def getTags(user_id):
     tags = Tag.query.filter(or_(Tag.user_id == user_id, Tag.user_id == "0")).all()
     return jsonify([tag.to_dict() for tag in tags])
+
+@tagApi.route('/tag/getByTagId/<string:tag_id>', methods=['GET'])
+def getTag(tag_id):
+    tag = Tag.query.get(tag_id)
+    return jsonify(tag.to_dict())

@@ -44,3 +44,10 @@ def deleteTask(taskId):
             return jsonify({'success': False, 'message': str(e)})
     return jsonify({'success': False, 'message': 'Task not found'})
 
+@taskApi.route('/task/<string:taskId>', methods=['GET'])
+def getTask(taskId):
+    task = Task.query.get(taskId)
+    if task:
+        return jsonify(task.to_dict())
+    return jsonify({'success': False, 'message': 'Task not found'})
+

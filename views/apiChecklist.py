@@ -27,3 +27,8 @@ def createChecklist():
             "success": False,
             "message": str(e),
         })
+
+@checklistApi.route('/checklist/getAllByTaskId/<string:taskId>', methods=['GET', 'OPTIONS'])
+def getAllChecklistByTaskId(taskId):
+    checklistItems = Checklist.query.filter_by(taskId=taskId).all()
+    return jsonify([checklist.to_dict() for checklist in checklistItems])

@@ -9,3 +9,8 @@ priorityApi = Blueprint('priority_api', __name__)
 def get_priority():
     priorities = Priority.query.all()
     return jsonify([priority.to_dict() for priority in priorities])
+
+@priorityApi.route('/priority/<string:priority_id>', methods=['GET'])
+def get_priority_by_id(priority_id):
+    priority = Priority.query.get(priority_id)
+    return jsonify(priority.to_dict())
