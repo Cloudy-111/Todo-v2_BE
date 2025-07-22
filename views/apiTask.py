@@ -31,3 +31,16 @@ def getDayTask():
     data = request.json
     return task_service.getDayTasks(data)
 
+@taskApi.route('/task/delete/<string:taskId>', methods=['DELETE'])
+def deleteTask(taskId):
+    task = Task.query.get(taskId)
+    if task:
+        try:
+            db.session.delete(task)
+            db.session.commit()
+            return jsonify({'success': True, 'message': 'Task deleted'})
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'success': False, 'message': str(e)})
+    return jsonify({'success': False, 'message': 'Task not found'})
+
