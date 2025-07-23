@@ -51,3 +51,24 @@ def getTask(taskId):
         return jsonify(task.to_dict())
     return jsonify({'success': False, 'message': 'Task not found'})
 
+@taskApi.route('/task/completed/<string:taskId>', methods=['PUT', 'OPTIONS'])
+def completeTask(taskId):
+    return task_service.complete_task(taskId)
+
+@taskApi.route('/task/updateProgress/<string:taskId>', methods=['POST', 'OPTIONS'])
+def updateProgress(taskId):
+    task = Task.query.get(taskId)
+    data = request.json
+    if task:
+        task.successRate = data['successRate']
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            "message": "Task updated successfully",
+            "taskId": task.id
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "Task not found",
+        })

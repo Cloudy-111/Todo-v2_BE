@@ -34,3 +34,24 @@ def convert_date_string_to_millis(dateString):
     except Exception as e:
         traceback.print_exc()
         return -1
+
+def datetime_to_millis(date):
+    return int(date.timestamp() * 1000)
+
+def complete_task(taskId):
+    task = Task.query.get(taskId)
+    if task:
+        task.isCompleted = True
+        task.completedAt = datetime_to_millis(datetime.utcnow())
+        task.successRate = 1
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            "message": "Task completed",
+            "taskId": taskId,
+        }), 200
+    else:
+        return jsonify({
+            "success": False,
+            "message": "Task not found",
+        }), 404
