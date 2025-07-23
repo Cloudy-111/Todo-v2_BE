@@ -32,3 +32,23 @@ def createChecklist():
 def getAllChecklistByTaskId(taskId):
     checklistItems = Checklist.query.filter_by(taskId=taskId).all()
     return jsonify([checklist.to_dict() for checklist in checklistItems])
+
+@checklistApi.route('/checklist/toggleCompleted', methods=['PUT', 'OPTIONS'])
+def toggleChecklistCompleted():
+    try:
+        item_ids = request.json
+        for item_id in item_ids:
+            item = Checklist.query.get(item_id)
+            if item:
+                item.isCompleted = not item.isCompleted
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            "message": "checklist completed successfully",
+        })
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({
+            "success": False,
+            "message": str(e),
+        })

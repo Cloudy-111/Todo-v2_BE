@@ -20,8 +20,11 @@ def getDayTasks(data):
         }), 400
 
 def checkDay(startTime, endTime, daySelect):
-    if convert_date_string_to_millis(daySelect) >= startTime or convert_date_string_to_millis(daySelect) <= endTime: return True
-    return False
+    day_millis = convert_date_string_to_millis(daySelect)
+    start_of_day = day_millis
+    end_of_day = day_millis + 86400000  # +1 ngày (ms)
+
+    return startTime < end_of_day and endTime >= start_of_day
 
 def convert_date_string_to_millis(dateString):
     try:
