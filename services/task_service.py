@@ -55,3 +55,29 @@ def complete_task(taskId):
             "success": False,
             "message": "Task not found",
         }), 404
+
+def getTasksLimited(data):
+    try:
+        amount = int(data['amount'])
+        userId = data['userId']
+        tagIds = data.get('tagIds', [])
+
+        tasks = fetch_tasks_by_tags_limited(userId, tagIds, amount)
+        return jsonify([task.to_dict() for task in tasks])
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({
+            "message": str(e),
+            "success": False,
+        }), 400
+
+def fetch_tasks_by_tags_limited(userId, tagIds, amount):
+    result = []
+    for tag_id in tagIds:
+        q = (Task.query
+             .filter(Task.userId == userId, Task.tagId == tag_id)
+             .order_by(Task.startTime.asc())
+             .limit(amount)
+             .all())
+        result.extend(q)
+    return result

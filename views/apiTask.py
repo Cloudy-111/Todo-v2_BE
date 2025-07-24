@@ -72,3 +72,8 @@ def updateProgress(taskId):
             "success": False,
             "message": "Task not found",
         })
+
+@taskApi.route('/task/getDayTaskLimited', methods=['POST'])
+def getDayTaskLimited():
+    data = request.json
+    return task_service.getTasksLimited(data)
