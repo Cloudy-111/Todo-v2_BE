@@ -81,3 +81,20 @@ def fetch_tasks_by_tags_limited(userId, tagIds, amount):
              .all())
         result.extend(q)
     return result
+
+def getTasksByTagId(data):
+    try:
+        userId = data['userId']
+        tagId = data['tagId']
+
+        tasks = (Task.query
+                 .filter(Task.userId == userId, Task.tagId == tagId)
+                 .order_by(Task.startTime.asc())
+                 .all())
+        return jsonify([task.to_dict() for task in tasks])
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({
+            "message": str(e),
+            "success": False,
+        }), 400

@@ -77,3 +77,8 @@ def updateProgress(taskId):
 def getDayTaskLimited():
     data = request.json
     return task_service.getTasksLimited(data)
+
+@taskApi.route('/task/getByTagId', methods=['POST'])
+def getByTagId():
+    data = request.json
+    return task_service.getTasksByTagId(data)
