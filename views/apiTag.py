@@ -3,6 +3,8 @@ from models import Tag
 from models import db
 from sqlalchemy import or_
 
+from services import tag_service
+
 tagApi = Blueprint('tagApi', __name__)
 
 @tagApi.route('/tag/create', methods=['POST', 'OPTIONS'])
@@ -55,3 +57,8 @@ def getTags(user_id):
 def getTag(tag_id):
     tag = Tag.query.get(tag_id)
     return jsonify(tag.to_dict())
+
+@tagApi.route('/tag/edit', methods=['POST'])
+def editTag():
+    data = request.json
+    return tag_service.editTag(data)
