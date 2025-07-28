@@ -98,3 +98,17 @@ def getTasksByTagId(data):
             "message": str(e),
             "success": False,
         }), 400
+
+def searchTask(data):
+    try:
+        userId = data['userId']
+        query = data['query']
+
+        tasks = Task.query.filter(Task.userId == userId, Task.title.ilike(f"%{query}%")).limit(5).all()
+        return jsonify([task.to_dict() for task in tasks])
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({
+            "message": str(e),
+            "success": False,
+        }), 400

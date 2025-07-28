@@ -82,3 +82,8 @@ def getDayTaskLimited():
 def getByTagId():
     data = request.json
     return task_service.getTasksByTagId(data)
+
+@taskApi.route('/task/search', methods=['POST'])
+def searchTask():
+    data = request.json
+    return task_service.searchTask(data)
