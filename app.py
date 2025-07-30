@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
-from views import apiUser, apiTag, apiPriority, apiTask, apiChecklist
+from views import apiUser, apiTag, apiPriority, apiTask, apiChecklist, apiNote
 from models import db
+from models.note import Note
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -22,6 +23,8 @@ app.register_blueprint(apiChecklist.checklistApi)
 app.register_blueprint(apiTask.taskApi)
 
 app.register_blueprint(apiPriority.priorityApi)
+
+app.register_blueprint(apiNote.noteApi)
 
 if __name__ == '__main__':
     with app.app_context():
