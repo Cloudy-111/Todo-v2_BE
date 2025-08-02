@@ -90,3 +90,63 @@ def getUser(user_id):
             "success": False,
             "message": "User not found"
         })
+
+@userApi.route('/user/updateAvatar', methods=['POST'])
+def updateAvatar():
+    data = request.get_json()
+    avatar = data.get('avatar')
+    userId = data.get('userId')
+    if avatar:
+        user = User.query.filter(User.id == userId).first()
+        user.avatar = avatar
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            "message": "Avatar Updated Successfully"
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "User not found"
+        })
+
+@userApi.route('/user/updatePassword', methods=['POST'])
+def updatePassword():
+    data = request.get_json()
+    password = data.get('newPassword')
+    userId = data.get('userId')
+
+    user = User.query.filter(User.id == userId).first()
+    if user:
+        user.password = password
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            "message": "Password Updated Successfully"
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "User not found"
+        })
+
+@userApi.route('/user/password/<string:user_id>', methods=['GET'])
+def getUserWithPassword(user_id):
+    user = User.query.filter(User.id == user_id).first()
+    if user:
+        return jsonify({
+            "data": {
+                "id": user.id,
+                "username": user.username,
+                "avatar": user.avatar,
+                "email": user.email,
+                "password": user.password,
+            },
+            "success": True,
+            "message": "Get User Success"
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "User not found"
+        })
