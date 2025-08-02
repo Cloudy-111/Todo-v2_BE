@@ -70,3 +70,23 @@ def register():
 def getUsers():
     users = User.query.all()
     return jsonify([(c.username, c.id, c.email, c.password, c.avatar) for c in users])
+
+@userApi.route('/user/<string:user_id>', methods=['GET'])
+def getUser(user_id):
+    user = User.query.filter(User.id == user_id).first()
+    if user:
+        return jsonify({
+            "data": {
+                "id": user.id,
+                "username": user.username,
+                "avatar": user.avatar,
+                "email": user.email,
+            },
+            "success": True,
+            "message": "Get User Success"
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "User not found"
+        })
