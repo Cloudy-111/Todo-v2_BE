@@ -150,3 +150,43 @@ def getUserWithPassword(user_id):
             "success": False,
             "message": "User not found"
         })
+
+@userApi.route('/user/loginGoogle', methods=['POST'])
+def loginGoogle():
+    data = request.get_json()
+    firebase_uid = data.get('id')
+    email = data.get('email')
+    username = data.get('username')
+    avatar = data.get('avatar')
+
+    user = User.query.filter(User.id == firebase_uid).first()
+    if not user:
+        user = User(id=firebase_uid, username=username, password = "", email=email, avatar=avatar)
+        db.session.add(user)
+        db.session.commit()
+
+    return jsonify({
+        'status': 'success',
+        'user_id': user.id,
+        'message': 'Login successful'
+    }), 200
+
+@userApi.route('/user/resetPassword', methods=['POST'])
+def resetPassword():
+    data = request.get_json()
+    password = data.get('newPassword')
+    email = data.get('email')
+
+    user = User.query.filter(User.email == email).first()
+    if user:
+        user.password = password
+        db.session.commit()
+        return jsonify({
+            "success": True,
+            "message": "Password Updated Successfully"
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "User not found"
+        })
